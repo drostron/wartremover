@@ -129,10 +129,14 @@ lazy val sbtPlug: Project = Project(
 lazy val testMacros: Project = Project(
   id = "test-macros",
   base = file("test-macros")
-).settings(
+).settings(commonSettings ++ Seq(
+  publishArtifact := false,
+  crossScalaVersions := travisScalaVersions.value,
   libraryDependencies ++= Seq(
     "org.typelevel" %% "macro-compat" % "1.1.1",
     "org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.patch)
   )
-).enablePlugins(CrossPerProjectPlugin)
+): _*)
+  .enablePlugins(CrossPerProjectPlugin)
+  .enablePlugins(TravisYaml)
